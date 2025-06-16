@@ -83,36 +83,27 @@ import { HabitCompletion } from '../entities/habit-completion.entity';
           let sslOptions: any = false;
           
           if (sslConfig !== 'disable') {
+            // CONTEXT: Simplified SSL configuration that works with NODE_TLS_REJECT_UNAUTHORIZED
+            // The global environment variable handles certificate validation bypass
             sslOptions = {
-              // CONTEXT: DigitalOcean managed databases require SSL
-              rejectUnauthorized: false, // More permissive for managed DB certificates
-              checkServerIdentity: false, // Disable hostname verification for managed DBs
-              // Additional Node.js SSL options for better compatibility
-              secureProtocol: 'TLSv1_2_method', // Use TLS 1.2
-              ciphers: 'HIGH:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!SRP:!CAMELLIA',
+              rejectUnauthorized: false, // Always false, global env var handles this
+              checkServerIdentity: false, // Disable hostname verification
             };
             
-            // CONTEXT: If CA certificate is provided, use it but with permissive validation
+            // CONTEXT: Only add CA certificate if available, but don't rely on it for validation
             if (caCertificate) {
-              // Validate certificate format
               const isValidCert = caCertificate.includes('-----BEGIN CERTIFICATE-----') && 
                                  caCertificate.includes('-----END CERTIFICATE-----');
               
               if (isValidCert) {
-                console.log('🔐 Using provided CA certificate for secure database connection');
+                console.log('🔐 Using CA certificate (validation bypassed via NODE_TLS_REJECT_UNAUTHORIZED)');
                 sslOptions.ca = caCertificate;
-                // Keep rejectUnauthorized: false to avoid "self-signed certificate in certificate chain" errors
-                // The CA certificate provides trust, but we allow intermediate certificate flexibility
-                sslOptions.rejectUnauthorized = false;
               } else {
-                console.log('❌ CA certificate is malformed, falling back to insecure SSL');
-                console.log('Certificate content preview:', caCertificate.substring(0, 200));
-                sslOptions.rejectUnauthorized = false;
+                console.log('❌ CA certificate is malformed, proceeding without it');
               }
-            } else {
-              console.log('⚠️  Using SSL without CA certificate verification (less secure)');
-              sslOptions.rejectUnauthorized = false;
             }
+            
+            console.log('🔓 SSL enabled with relaxed validation for DigitalOcean compatibility');
           }
 
           const config = {
