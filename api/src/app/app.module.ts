@@ -59,8 +59,26 @@ import { HabitCompletion } from '../entities/habit-completion.entity';
         } else {
           // CONTEXT: Production configuration for DigitalOcean App Platform + Managed PostgreSQL
           // Handles SSL certificate requirements for managed database connections
-          const sslConfig = configService.get('DB_SSL_MODE') || 'require';
-          const caCertificate = configService.get('DB_CA_CERT');
+          const sslConfig = configService.get('DB_SSL_MODE') || process.env.DB_SSL_MODE || 'require';
+          
+          // CONTEXT: Try ConfigService first, fallback to direct process.env access
+          // Some deployment platforms may have issues with ConfigService reading multiline values
+          let caCertificate = configService.get('DB_CA_CERT');
+          if (!caCertificate && process.env.DB_CA_CERT) {
+            console.log('⚠️  ConfigService couldn\'t read DB_CA_CERT, using direct process.env access');
+            caCertificate = process.env.DB_CA_CERT;
+          }
+          
+          // CONTEXT: Additional diagnostic logging for SSL certificate debugging
+          console.log('🔍 SSL Certificate Debug Info:');
+          console.log('- sslConfig:', sslConfig);
+          console.log('- caCertificate from ConfigService:', !!configService.get('DB_CA_CERT'));
+          console.log('- caCertificate from process.env:', !!process.env.DB_CA_CERT);
+          console.log('- Final caCertificate exists:', !!caCertificate);
+          if (caCertificate) {
+            console.log('- Certificate length:', caCertificate.length);
+            console.log('- Certificate preview:', caCertificate.substring(0, 100) + '...');
+          }
           
           let sslOptions: any = false;
           
@@ -71,11 +89,21 @@ import { HabitCompletion } from '../entities/habit-completion.entity';
               checkServerIdentity: false, // Disable hostname verification for managed DBs
             };
             
-            // CONTEXT: If CA certificate is provided, use it for secure connection
+            // CONTEXT: If CA certificate is provided, validate and use it for secure connection
             if (caCertificate) {
-              console.log('🔐 Using provided CA certificate for secure database connection');
-              sslOptions.ca = caCertificate;
-              sslOptions.rejectUnauthorized = true;
+              // Validate certificate format
+              const isValidCert = caCertificate.includes('-----BEGIN CERTIFICATE-----') && 
+                                 caCertificate.includes('-----END CERTIFICATE-----');
+              
+              if (isValidCert) {
+                console.log('🔐 Using provided CA certificate for secure database connection');
+                sslOptions.ca = caCertificate;
+                sslOptions.rejectUnauthorized = true;
+              } else {
+                console.log('❌ CA certificate is malformed, falling back to insecure SSL');
+                console.log('Certificate content preview:', caCertificate.substring(0, 200));
+                sslOptions.rejectUnauthorized = false;
+              }
             } else {
               console.log('⚠️  Using SSL without CA certificate verification (less secure)');
               sslOptions.rejectUnauthorized = false;

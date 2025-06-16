@@ -4,7 +4,12 @@
 dist
 tmp
 out-tsc
+
+# environment variables
 .env
+.env.local
+.env.production
+.env.staging
 
 # dependencies
 node_modules
