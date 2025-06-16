@@ -28,7 +28,11 @@ import { HabitCompletion } from '../entities/habit-completion.entity';
             url: databaseUrl,
             entities: [Goal, Habit, HabitCompletion],
             synchronize: configService.get('NODE_ENV') !== 'production', // Safe for production
-            ssl: configService.get('NODE_ENV') === 'production' ? { rejectUnauthorized: false } : false,
+            ssl: configService.get('NODE_ENV') === 'production' ? { 
+              rejectUnauthorized: false,
+              checkServerIdentity: false,
+              secureProtocol: 'TLSv1_2_method'
+            } : false,
             logging: configService.get('NODE_ENV') === 'development',
           };
         } else {
