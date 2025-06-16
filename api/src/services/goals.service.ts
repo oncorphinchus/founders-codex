@@ -2,6 +2,7 @@ import { Injectable, BadRequestException, NotFoundException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Goal, GoalType, GoalStatus } from '../entities/goal.entity';
+import { User } from '../entities/user.entity';
 import { CreateGoalDto } from '../dto/create-goal.dto';
 import { UpdateGoalDto } from '../dto/update-goal.dto';
 
@@ -10,6 +11,8 @@ export class GoalsService {
   constructor(
     @InjectRepository(Goal)
     private goalsRepository: Repository<Goal>,
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
   ) {}
 
   // CONTEXT: Implements "The Practitioner-Scholar" principle by enforcing strategic hierarchy
@@ -33,7 +36,7 @@ export class GoalsService {
     // Validate parent-child relationship
     if (parentId) {
       const parent = await this.goalsRepository.findOne({
-        where: { id: parentId, userId },
+        where: { id: parentId, user: { id: userId } },
       });
 
       if (!parent) {
@@ -51,7 +54,7 @@ export class GoalsService {
       ...goalData,
       type,
       parentId,
-      userId,
+      user: { id: userId },
     });
 
     return await this.goalsRepository.save(goal);
@@ -60,7 +63,7 @@ export class GoalsService {
   // CONTEXT: Retrieves the complete hierarchical structure for strategic overview
   async findAllByUser(userId: string): Promise<Goal[]> {
     return await this.goalsRepository.find({
-      where: { userId },
+      where: { user: { id: userId } },
       relations: ['children', 'parent'],
       order: { createdAt: 'ASC' },
     });
@@ -69,7 +72,7 @@ export class GoalsService {
   // CONTEXT: Builds the hierarchical tree structure for UI visualization
   async findHierarchyByUser(userId: string): Promise<Goal[]> {
     const allGoals = await this.goalsRepository.find({
-      where: { userId },
+      where: { user: { id: userId } },
       relations: ['children', 'parent'],
       order: { createdAt: 'ASC' },
     });
@@ -80,7 +83,7 @@ export class GoalsService {
 
   async findOne(id: string, userId: string): Promise<Goal> {
     const goal = await this.goalsRepository.findOne({
-      where: { id, userId },
+      where: { id, user: { id: userId } },
       relations: ['children', 'parent'],
     });
 
@@ -127,7 +130,7 @@ export class GoalsService {
 
     // CONTEXT: Prevent deletion of goals with active children to maintain hierarchy integrity
     const childrenCount = await this.goalsRepository.count({
-      where: { parentId: id, userId }
+      where: { parentId: id, user: { id: userId } }
     });
 
     if (childrenCount > 0) {
@@ -142,7 +145,7 @@ export class GoalsService {
   // CONTEXT: Finds all goals of a specific type for targeted management
   async findByType(userId: string, type: GoalType): Promise<Goal[]> {
     return await this.goalsRepository.find({
-      where: { userId, type },
+      where: { user: { id: userId }, type },
       relations: ['children', 'parent'],
       order: { createdAt: 'ASC' },
     });
@@ -152,7 +155,7 @@ export class GoalsService {
   async getTodaysTasks(userId: string): Promise<Goal[]> {
     return await this.goalsRepository.find({
       where: {
-        userId,
+        user: { id: userId },
         type: GoalType.DAILY_ATOMIC,
         status: GoalStatus.NOT_STARTED,
       },

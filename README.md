@@ -2,8 +2,8 @@
 
 ## ✅ **BACKEND SUCCESSFULLY DEPLOYED**
 
-**Live API**: [https://founders-codex-25cux.ondigitalocean.app/api](https://founders-codex-25cux.ondigitalocean.app/api)  
-**Health Check**: [https://founders-codex-25cux.ondigitalocean.app/api/health](https://founders-codex-25cux.ondigitalocean.app/api/health)
+**Live API**: [https://founders-codex-rgsxo.ondigitalocean.app/api](https://founders-codex-rgsxo.ondigitalocean.app/api)  
+**Health Check**: [https://founders-codex-rgsxo.ondigitalocean.app/api/health](https://founders-codex-rgsxo.ondigitalocean.app/api/health)
 
 A life-planning and execution system designed for ambitious entrepreneurs, built on the philosophy of finite time awareness and strategic goal anchoring. Currently deployed as a production-ready API with mobile app in development.
 
@@ -170,6 +170,77 @@ founders-codex/
 ├── nx.json                       # Nx workspace configuration
 ├── package.json                  # Root dependencies
 └── README.md
+```
+
+## 📡 API Endpoints
+
+The complete, production-ready API includes the following endpoints:
+
+### Authentication
+```
+POST   /api/auth/register        # User registration
+POST   /api/auth/login           # User login with JWT token
+POST   /api/auth/login-local     # Local strategy login
+```
+
+### Goal Management (The Practitioner-Scholar System)
+```
+POST   /api/goals                # Create goal with hierarchy validation
+GET    /api/goals                # Get all user goals
+GET    /api/goals/hierarchy      # Get hierarchical tree structure
+GET    /api/goals/by-type/:type  # Get goals by type (KEYSTONE, ANNUAL, etc.)
+GET    /api/goals/today          # Get today's daily atomic goals
+GET    /api/goals/:id            # Get specific goal
+PATCH  /api/goals/:id            # Update goal
+PATCH  /api/goals/:id/complete   # Mark goal complete
+PATCH  /api/goals/:id/learning   # Mark goal as learning in progress
+DELETE /api/goals/:id            # Remove goal (validates no active children)
+```
+
+### Habit Management (The 1% Better System)
+```
+POST   /api/habits               # Create atomic habit
+GET    /api/habits               # Get all user habits with metrics
+GET    /api/habits/:id           # Get specific habit
+PATCH  /api/habits/:id           # Update habit details
+DELETE /api/habits/:id           # Remove habit
+POST   /api/habits/:id/complete  # Mark habit complete for today
+GET    /api/habits/:id/completions # Get completion history
+```
+
+### Resilience Toolkit (Stoic Journal)
+```
+POST   /api/journal              # Create journal entry
+GET    /api/journal              # Get all journal entries
+GET    /api/journal/today        # Get today's journal entry
+GET    /api/journal/streak       # Get current journaling streak
+GET    /api/journal/prompts/:type # Get prompts (STOIC_AM, STOIC_PM, GRATITUDE)
+GET    /api/journal/:id          # Get specific journal entry
+PUT    /api/journal/:id          # Update journal entry
+DELETE /api/journal/:id          # Delete journal entry
+```
+
+### Decision Journal (Improving Judgment)
+```
+POST   /api/decision-logs        # Create decision log entry
+GET    /api/decision-logs        # Get all decision logs
+GET    /api/decision-logs/due-for-review # Get decisions due for review
+GET    /api/decision-logs/analytics # Get decision quality analytics
+GET    /api/decision-logs/:id    # Get specific decision log
+PATCH  /api/decision-logs/:id    # Update decision log
+PATCH  /api/decision-logs/:id/review # Mark decision as reviewed with outcome
+DELETE /api/decision-logs/:id    # Delete decision log
+```
+
+### Well-Being Monitor (PERMA Model)
+```
+POST   /api/perma/daily          # Upsert daily PERMA entry
+GET    /api/perma                # Get all PERMA entries (with date filtering)
+GET    /api/perma/today          # Get today's PERMA entry
+GET    /api/perma/analytics      # Get well-being analytics and insights
+GET    /api/perma/:id            # Get specific PERMA entry
+PATCH  /api/perma/:id            # Update PERMA entry
+DELETE /api/perma/:id            # Delete PERMA entry
 ```
 
 ### 🔧 Development Commands

@@ -15,6 +15,7 @@ if (process.env.NODE_ENV === 'production') {
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
   
   // Additional SSL environment variables for better compatibility
+  // Only set PGSSLMODE in production to avoid local PostgreSQL errors
   process.env.PGSSLMODE = 'prefer'; // Use SSL if available, but don't require verification
 }
 

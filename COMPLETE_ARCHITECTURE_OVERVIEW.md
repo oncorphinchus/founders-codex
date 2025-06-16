@@ -3,8 +3,8 @@
 ## 🚀 **DEPLOYMENT STATUS: LIVE IN PRODUCTION**
 
 **✅ Successfully Deployed on DigitalOcean App Platform**
-- **Live API URL**: `https://founders-codex-25cux.ondigitalocean.app/api`
-- **Health Check**: `https://founders-codex-25cux.ondigitalocean.app/api/health`
+- **Live API URL**: `https://founders-codex-rgsxo.ondigitalocean.app/api`
+- **Health Check**: `https://founders-codex-rgsxo.ondigitalocean.app/api/health`
 - **Database**: DigitalOcean Managed PostgreSQL (SSL-enabled)
 - **Deployment Date**: June 16, 2025
 - **Status**: All critical systems operational
@@ -106,20 +106,35 @@ mobile/
 api/
 ├── src/
 │   ├── app/                    # Application module
+│   ├── auth/                   # JWT Authentication system
 │   ├── controllers/            # HTTP endpoint handlers
 │   │   ├── goals.controller.ts     # Goal management endpoints
-│   │   └── habits.controller.ts    # Habit management endpoints
+│   │   ├── habits.controller.ts    # Habit management endpoints
+│   │   ├── journal.controller.ts   # Stoic journaling endpoints
+│   │   ├── decision-logs.controller.ts # Decision tracking endpoints
+│   │   └── perma.controller.ts     # Well-being tracking endpoints
 │   ├── services/               # Business logic layer
 │   │   ├── goals.service.ts        # Goal operations & validation
-│   │   └── habits.service.ts       # Habit operations & metrics
+│   │   ├── habits.service.ts       # Habit operations & metrics
+│   │   ├── journal.service.ts      # Stoic journaling logic
+│   │   ├── decision-logs.service.ts # Decision tracking logic
+│   │   └── perma.service.ts        # PERMA well-being analytics
 │   ├── entities/               # Database models
+│   │   ├── user.entity.ts          # User authentication model
 │   │   ├── goal.entity.ts          # Goal hierarchy structure
 │   │   ├── habit.entity.ts         # Habit definition
-│   │   └── habit-completion.entity.ts # Completion tracking
+│   │   ├── habit-completion.entity.ts # Completion tracking
+│   │   ├── journal-entry.entity.ts # Stoic journal entries
+│   │   ├── decision-log.entity.ts  # Decision tracking model
+│   │   └── perma-entry.entity.ts   # PERMA well-being model
 │   ├── dto/                    # Data transfer objects
 │   ├── modules/                # Feature modules
+│   │   ├── auth.module.ts          # Authentication module
 │   │   ├── goals.module.ts         # Goal Stack module
-│   │   └── habits.module.ts        # Habit Engine module
+│   │   ├── habits.module.ts        # Habit Engine module
+│   │   ├── journal.module.ts       # Resilience Toolkit module
+│   │   ├── decision-logs.module.ts # Decision Journal module
+│   │   └── perma.module.ts         # Well-Being Monitor module
 │   └── guards/                 # Authentication & authorization
 └── project.json               # Nx project configuration
 ```
@@ -166,6 +181,33 @@ Implements "The Practitioner-Scholar" hierarchical goal system.
 - Strategic alignment validation
 - Hypothesis tracking for business experiments
 - "Language of Growth" status management
+
+#### 3. **Resilience Toolkit** (`modules/journal.module.ts`)
+Implements "The Antifragile User" principles through systematic reflection and learning.
+
+**Key Features**:
+- Stoic morning and evening journal prompts
+- Streak tracking for consistency building
+- Structured reflection for mental fortitude
+- Integration with goal completion workflows
+
+#### 4. **Decision Journal** (`modules/decision-logs.module.ts`)
+Implements "Practitioner-Scholar" decision tracking for improving judgment quality.
+
+**Key Features**:
+- Systematic decision logging with expected outcomes
+- Review scheduling for outcome analysis
+- Confidence calibration tracking
+- Decision quality analytics and trends
+
+#### 5. **Well-Being Monitor** (`modules/perma.module.ts`)
+Implements "Integrated Well-Being" through Martin Seligman's PERMA model tracking.
+
+**Key Features**:
+- Daily PERMA scores (Positive Emotion, Engagement, Relationships, Meaning, Accomplishment)
+- Burnout risk assessment based on score patterns
+- Gratitude logging for positive emotion boost
+- Well-being analytics and personalized insights
 
 **Database Schema**:
 ```sql
@@ -226,9 +268,21 @@ const validHierarchy = {
 
 ```mermaid
 erDiagram
+    USERS {
+        uuid id
+        string email
+        string password
+        string firstName
+        string lastName
+        date birthDate
+        boolean isActive
+        timestamp createdAt
+        timestamp updatedAt
+    }
+    
     GOALS {
         uuid id
-        string userId
+        uuid userId
         enum type
         string title
         text description
@@ -245,7 +299,7 @@ erDiagram
     
     HABITS {
         uuid id
-        string userId
+        uuid userId
         string title
         text description
         string cue
@@ -259,6 +313,55 @@ erDiagram
         date completionDate
     }
     
+    JOURNAL_ENTRIES {
+        uuid id
+        uuid userId
+        date date
+        enum type
+        text content
+        text gratitude1
+        text gratitude2
+        text gratitude3
+        timestamp createdAt
+    }
+    
+    DECISION_LOGS {
+        uuid id
+        uuid userId
+        date date
+        text decision
+        text expectedOutcome
+        text actualOutcome
+        text lessonsLearned
+        string emotionalState
+        int confidenceLevel
+        date reviewDate
+        boolean isReviewed
+        timestamp createdAt
+        timestamp updatedAt
+    }
+    
+    PERMA_ENTRIES {
+        uuid id
+        uuid userId
+        date date
+        int positiveEmotion
+        int engagement
+        int relationships
+        int meaning
+        int accomplishment
+        text gratitudeEntry1
+        text gratitudeEntry2
+        text gratitudeEntry3
+        text dailyReflection
+        timestamp createdAt
+    }
+    
+    USERS ||--o{ GOALS : "userId"
+    USERS ||--o{ HABITS : "userId"
+    USERS ||--o{ JOURNAL_ENTRIES : "userId"
+    USERS ||--o{ DECISION_LOGS : "userId"
+    USERS ||--o{ PERMA_ENTRIES : "userId"
     GOALS ||--o{ GOALS : "parentId (self-referencing)"
     HABITS ||--o{ HABIT_COMPLETIONS : "habitId"
 ```
@@ -275,14 +378,11 @@ erDiagram
 
 ## 🔄 API Endpoints
 
-### Habit Management
+### Authentication
 ```
-POST   /habits                 # Create atomic habit
-GET    /habits                 # Get all user habits with metrics
-POST   /habits/:id/complete    # Mark habit complete for today
-GET    /habits/:id/completions # Get completion history
-PUT    /habits/:id             # Update habit details
-DELETE /habits/:id             # Remove habit
+POST   /auth/register          # User registration
+POST   /auth/login             # User login with JWT token
+POST   /auth/login-local       # Local strategy login
 ```
 
 ### Goal Management
@@ -290,10 +390,59 @@ DELETE /habits/:id             # Remove habit
 POST   /goals                  # Create goal with hierarchy validation
 GET    /goals                  # Get all user goals
 GET    /goals/hierarchy        # Get hierarchical tree structure
-GET    /goals/type/:type       # Get goals by type (KEYSTONE, ANNUAL, etc.)
-PUT    /goals/:id              # Update goal
-POST   /goals/:id/complete     # Mark goal complete
+GET    /goals/by-type/:type    # Get goals by type (KEYSTONE, ANNUAL, etc.)
+GET    /goals/today            # Get today's daily atomic goals
+GET    /goals/:id              # Get specific goal
+PATCH  /goals/:id              # Update goal
+PATCH  /goals/:id/complete     # Mark goal complete
+PATCH  /goals/:id/learning     # Mark goal as learning in progress
 DELETE /goals/:id              # Remove goal (validates no active children)
+```
+
+### Habit Management
+```
+POST   /habits                 # Create atomic habit
+GET    /habits                 # Get all user habits with metrics
+GET    /habits/:id             # Get specific habit
+PATCH  /habits/:id             # Update habit details
+DELETE /habits/:id             # Remove habit
+POST   /habits/:id/complete    # Mark habit complete for today
+GET    /habits/:id/completions # Get completion history
+```
+
+### Resilience Toolkit (Stoic Journal)
+```
+POST   /journal                # Create journal entry
+GET    /journal                # Get all journal entries
+GET    /journal/today          # Get today's journal entry
+GET    /journal/streak         # Get current journaling streak
+GET    /journal/prompts/:type  # Get prompts (STOIC_AM, STOIC_PM, GRATITUDE)
+GET    /journal/:id            # Get specific journal entry
+PUT    /journal/:id            # Update journal entry
+DELETE /journal/:id            # Delete journal entry
+```
+
+### Decision Journal
+```
+POST   /decision-logs          # Create decision log entry
+GET    /decision-logs          # Get all decision logs
+GET    /decision-logs/due-for-review # Get decisions due for review
+GET    /decision-logs/analytics # Get decision quality analytics
+GET    /decision-logs/:id      # Get specific decision log
+PATCH  /decision-logs/:id      # Update decision log
+PATCH  /decision-logs/:id/review # Mark decision as reviewed with outcome
+DELETE /decision-logs/:id      # Delete decision log
+```
+
+### Well-Being Monitor (PERMA)
+```
+POST   /perma/daily            # Upsert daily PERMA entry
+GET    /perma                  # Get all PERMA entries (with date filtering)
+GET    /perma/today            # Get today's PERMA entry
+GET    /perma/analytics        # Get well-being analytics and insights
+GET    /perma/:id              # Get specific PERMA entry
+PATCH  /perma/:id              # Update PERMA entry
+DELETE /perma/:id              # Delete PERMA entry
 ```
 
 ---

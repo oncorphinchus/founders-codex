@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
+import { User } from './user.entity';
 
 // CONTEXT: Implements "The Practitioner-Scholar" principle by creating a hierarchical structure
 // that enforces strategic alignment from 10-year vision down to daily atomic tasks
@@ -23,8 +24,8 @@ export class Goal {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  userId: string; // In a real app, this would be a foreign key to a User entity
+  @ManyToOne(() => User, { eager: false, nullable: false })
+  user: User;
 
   @Column({
     type: 'enum',

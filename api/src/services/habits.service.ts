@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Between } from 'typeorm';
 import { Habit } from '../entities/habit.entity';
 import { HabitCompletion } from '../entities/habit-completion.entity';
+import { User } from '../entities/user.entity';
 import { CreateHabitDto } from '../dto/create-habit.dto';
 import { UpdateHabitDto } from '../dto/update-habit.dto';
 
@@ -13,6 +14,8 @@ export class HabitsService {
     private habitsRepository: Repository<Habit>,
     @InjectRepository(HabitCompletion)
     private completionsRepository: Repository<HabitCompletion>,
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
   ) {}
 
   // CONTEXT: Creates atomic habits designed to be "too small to fail"
@@ -20,7 +23,7 @@ export class HabitsService {
   async create(userId: string, createHabitDto: CreateHabitDto): Promise<Habit> {
     const habit = this.habitsRepository.create({
       ...createHabitDto,
-      userId,
+      user: { id: userId },
     });
 
     const savedHabit = await this.habitsRepository.save(habit);
@@ -33,7 +36,7 @@ export class HabitsService {
   // Calculates streaks and completion rates to "Make it satisfying"
   async findAllByUser(userId: string, days: number = 90): Promise<Habit[]> {
     const habits = await this.habitsRepository.find({
-      where: { userId },
+      where: { user: { id: userId } },
       relations: ['completions'],
       order: { creationDate: 'DESC' },
     });
@@ -46,7 +49,7 @@ export class HabitsService {
 
   async findOne(id: string, userId: string): Promise<Habit> {
     const habit = await this.habitsRepository.findOne({
-      where: { id, userId },
+      where: { id, user: { id: userId } },
       relations: ['completions'],
     });
 
@@ -97,6 +100,7 @@ export class HabitsService {
     const completion = this.completionsRepository.create({
       habitId,
       completionDate: completionDateOnly,
+      user: { id: userId },
     });
 
     return await this.completionsRepository.save(completion);
@@ -201,10 +205,16 @@ export class HabitsService {
     return longestStreak;
   }
 
-  // CONTEXT: Calculates completion rate for progress tracking over specified period
-  private calculateCompletionRate(completions: HabitCompletion[], days: number): number {
-    if (days === 0) return 0;
-    return Math.round((completions.length / days) * 100);
+  // CONTEXT: Calculates completion rate over specified period for progress tracking
+  private calculateCompletionRate(completions: HabitCompletion[], days: number = 30): number {
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - days);
+
+    const recentCompletions = completions.filter(
+      completion => completion.completionDate >= cutoffDate
+    );
+
+    return Math.round((recentCompletions.length / days) * 100);
   }
 
   // CONTEXT: Checks if habit was completed today for UI state management
@@ -215,35 +225,27 @@ export class HabitsService {
     );
   }
 
-  // CONTEXT: Helper method to enrich habit with calculated metrics
-  private async enrichHabitWithMetrics(habit: Habit, days: number = 90): Promise<Habit> {
-    // Get completions for the specified period
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - days);
-    
-    const recentCompletions = habit.completions?.filter(
-      completion => completion.completionDate >= startDate
-    ) || [];
+  // CONTEXT: Enriches habit data with calculated metrics for UI display
+  // Provides all necessary data for visual feedback and motivation
+  private async enrichHabitWithMetrics(habit: Habit, days: number = 30): Promise<Habit> {
+    const currentStreak = await this.calculateCurrentStreak(habit.id);
+    const longestStreak = await this.calculateLongestStreak(habit.id);
+    const completionRate = this.calculateCompletionRate(habit.completions || [], days);
+    const isCompletedToday = this.isCompletedToday(habit.completions || []);
 
-    // Calculate all metrics
-    const [currentStreak, longestStreak] = await Promise.all([
-      this.calculateCurrentStreak(habit.id),
-      this.calculateLongestStreak(habit.id),
-    ]);
-
-    // Enrich habit object with calculated values
-    habit.currentStreak = currentStreak;
-    habit.longestStreak = longestStreak;
-    habit.completionRate = this.calculateCompletionRate(recentCompletions, days);
-    habit.isCompletedToday = this.isCompletedToday(habit.completions || []);
-
-    return habit;
+    return {
+      ...habit,
+      currentStreak,
+      longestStreak,
+      completionRate,
+      isCompletedToday,
+    };
   }
 
   // CONTEXT: Helper to get habit with fresh metric calculations
   private async getHabitWithMetrics(habitId: string, userId: string): Promise<Habit> {
     const habit = await this.habitsRepository.findOne({
-      where: { id: habitId, userId },
+      where: { id: habitId, user: { id: userId } },
       relations: ['completions'],
     });
 

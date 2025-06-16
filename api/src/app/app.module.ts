@@ -6,9 +6,17 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GoalsModule } from '../modules/goals.module';
 import { HabitsModule } from '../modules/habits.module';
+import { AuthModule } from '../auth/auth.module';
+import { JournalModule } from '../modules/journal.module';
+import { DecisionLogsModule } from '../modules/decision-logs.module';
+import { PermaModule } from '../modules/perma.module';
 import { Goal } from '../entities/goal.entity';
 import { Habit } from '../entities/habit.entity';
 import { HabitCompletion } from '../entities/habit-completion.entity';
+import { User } from '../entities/user.entity';
+import { JournalEntry } from '../entities/journal-entry.entity';
+import { DecisionLog } from '../entities/decision-log.entity';
+import { PermaEntry } from '../entities/perma-entry.entity';
 
 @Module({
   imports: [
@@ -33,28 +41,16 @@ import { HabitCompletion } from '../entities/habit-completion.entity';
          if (!isProduction) {
            const config = {
              type: 'postgres' as const,
-             host: configService.get('DB_HOST') || 'localhost',
-             port: parseInt(configService.get('DB_PORT') || '5432'),
-             username: configService.get('DB_USERNAME') || 'phish',
-             password: configService.get('DB_PASSWORD') || '',
-             database: configService.get('DB_NAME') || 'founders_codex',
-             entities: [Goal, Habit, HabitCompletion],
+             host: 'localhost',
+             port: 5432,
+             username: 'phish',
+             password: '',
+             database: 'founders_codex',
+             entities: [Goal, Habit, HabitCompletion, User, JournalEntry, DecisionLog, PermaEntry],
              synchronize: true, // Safe for development
-             ssl: false, // Explicitly disable SSL for local development
              logging: false, // Disable logging for cleaner output
-             // Add connection options to force no SSL
-             options: {
-               encrypt: false,
-               trustServerCertificate: false
-             },
-             extra: {
-               ssl: false,
-               // Additional PostgreSQL-specific SSL disable options
-               sslmode: 'disable',
-               options: '--sslmode=disable'
-             },
            };
-           console.log('📊 Using local development database config (SSL disabled)');
+           console.log('📊 Using PostgreSQL local development database');
            return config;
         } else {
           // CONTEXT: Production configuration for DigitalOcean App Platform + Managed PostgreSQL
@@ -109,7 +105,7 @@ import { HabitCompletion } from '../entities/habit-completion.entity';
           const config = {
             type: 'postgres' as const,
             url: databaseUrl,
-            entities: [Goal, Habit, HabitCompletion],
+            entities: [Goal, Habit, HabitCompletion, User, JournalEntry, DecisionLog, PermaEntry],
             synchronize: false, // Never auto-sync in production
             ssl: sslOptions,
             logging: false,
@@ -132,8 +128,12 @@ import { HabitCompletion } from '../entities/habit-completion.entity';
       },
       inject: [ConfigService],
     }),
+    AuthModule, // CONTEXT: Enables secure multi-tenant authentication
     GoalsModule, // CONTEXT: Integrates the Goal Stack system into the app
     HabitsModule, // CONTEXT: Integrates "The 1% Better System" for habit formation
+    JournalModule,
+    DecisionLogsModule,
+    PermaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

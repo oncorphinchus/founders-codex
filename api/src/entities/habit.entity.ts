@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne } from 'typeorm';
+import { User } from './user.entity';
 
 // CONTEXT: Implements "The 1% Better System" principle from James Clear's Atomic Habits
 // Each habit is designed to be "too small to fail" while building compound improvement
@@ -7,8 +8,8 @@ export class Habit {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  userId: string; // In a real app, this would be a foreign key to a User entity
+  @ManyToOne(() => User, { eager: false, nullable: false })
+  user: User;
 
   @Column()
   title: string; // e.g., "Read one page", "Write 50 words", "Do one push-up"
