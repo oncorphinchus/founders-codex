@@ -1,8 +1,11 @@
-# The Founder's Codex: Lifetime Calendar
+# 🚀 The Founder's Codex: Lifetime Calendar - LIVE IN PRODUCTION
 
-## MVP - "The Visualizer"
+## ✅ **BACKEND SUCCESSFULLY DEPLOYED**
 
-A life-planning and execution system designed for ambitious entrepreneurs, built on the philosophy of finite time awareness and strategic goal anchoring.
+**Live API**: [https://founders-codex-25cux.ondigitalocean.app/api](https://founders-codex-25cux.ondigitalocean.app/api)  
+**Health Check**: [https://founders-codex-25cux.ondigitalocean.app/api/health](https://founders-codex-25cux.ondigitalocean.app/api/health)
+
+A life-planning and execution system designed for ambitious entrepreneurs, built on the philosophy of finite time awareness and strategic goal anchoring. Currently deployed as a production-ready API with mobile app in development.
 
 ### 🎯 Core Mission
 
