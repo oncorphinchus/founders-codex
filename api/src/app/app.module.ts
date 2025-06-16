@@ -14,41 +14,96 @@ import { HabitCompletion } from '../entities/habit-completion.entity';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: ['.env', '../.env'], // Check both api/.env and parent .env
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
-        // CONTEXT: Support both DATABASE_URL (cloud standard) and individual DB vars (local dev)
+        // CONTEXT: Explicit development-first database configuration to avoid SSL issues
+        const nodeEnv = configService.get('NODE_ENV') || 'development';
+        const isProduction = nodeEnv === 'production';
         const databaseUrl = configService.get('DATABASE_URL');
         
-        if (databaseUrl) {
-          // Production: Use DATABASE_URL (Digital Ocean, Heroku, etc.)
-          return {
-            type: 'postgres',
+        console.log('🔧 Database Configuration:');
+        console.log('NODE_ENV:', nodeEnv);
+        console.log('Is Production:', isProduction);
+        console.log('DATABASE_URL exists:', !!databaseUrl);
+        
+                 // CONTEXT: Force local development configuration to prevent SSL errors
+         if (!isProduction) {
+           const config = {
+             type: 'postgres' as const,
+             host: configService.get('DB_HOST') || 'localhost',
+             port: parseInt(configService.get('DB_PORT') || '5432'),
+             username: configService.get('DB_USERNAME') || 'phish',
+             password: configService.get('DB_PASSWORD') || '',
+             database: configService.get('DB_NAME') || 'founders_codex',
+             entities: [Goal, Habit, HabitCompletion],
+             synchronize: true, // Safe for development
+             ssl: false, // Explicitly disable SSL for local development
+             logging: false, // Disable logging for cleaner output
+             // Add connection options to force no SSL
+             options: {
+               encrypt: false,
+               trustServerCertificate: false
+             },
+             extra: {
+               ssl: false,
+               // Additional PostgreSQL-specific SSL disable options
+               sslmode: 'disable',
+               options: '--sslmode=disable'
+             },
+           };
+           console.log('📊 Using local development database config (SSL disabled)');
+           return config;
+        } else {
+          // CONTEXT: Production configuration for DigitalOcean App Platform + Managed PostgreSQL
+          // Handles SSL certificate requirements for managed database connections
+          const sslConfig = configService.get('DB_SSL_MODE') || 'require';
+          const caCertificate = configService.get('DB_CA_CERT');
+          
+          let sslOptions: any = false;
+          
+          if (sslConfig !== 'disable') {
+            sslOptions = {
+              // CONTEXT: DigitalOcean managed databases require SSL
+              rejectUnauthorized: caCertificate ? true : false,
+              checkServerIdentity: false, // Disable hostname verification for managed DBs
+            };
+            
+            // CONTEXT: If CA certificate is provided, use it for secure connection
+            if (caCertificate) {
+              console.log('🔐 Using provided CA certificate for secure database connection');
+              sslOptions.ca = caCertificate;
+              sslOptions.rejectUnauthorized = true;
+            } else {
+              console.log('⚠️  Using SSL without CA certificate verification (less secure)');
+              sslOptions.rejectUnauthorized = false;
+            }
+          }
+
+          const config = {
+            type: 'postgres' as const,
             url: databaseUrl,
             entities: [Goal, Habit, HabitCompletion],
-            synchronize: configService.get('NODE_ENV') !== 'production', // Safe for production
-            ssl: configService.get('NODE_ENV') === 'production' ? { 
-              rejectUnauthorized: false,
-              checkServerIdentity: false,
-              secureProtocol: 'TLSv1_2_method'
-            } : false,
-            logging: configService.get('NODE_ENV') === 'development',
+            synchronize: false, // Never auto-sync in production
+            ssl: sslOptions,
+            logging: false,
+            // CONTEXT: Additional connection options for DigitalOcean compatibility
+            extra: {
+              connectionTimeoutMillis: 30000,
+              idleTimeoutMillis: 30000,
+              max: 10, // Maximum pool size
+            },
           };
-        } else {
-          // Development: Use individual environment variables
-          return {
-            type: 'postgres',
-            host: configService.get('DB_HOST', 'localhost'),
-            port: configService.get('DB_PORT', 5432),
-            username: configService.get('DB_USERNAME', 'postgres'),
-            password: configService.get('DB_PASSWORD', 'password'),
-            database: configService.get('DB_NAME', 'founders_codex'),
-            entities: [Goal, Habit, HabitCompletion],
-            synchronize: true, // Only for development
-            ssl: false,
-            logging: true,
-          };
+          
+          console.log('🏭 Using production database config for DigitalOcean:', {
+            ssl: sslOptions !== false ? 'enabled' : 'disabled',
+            hasCaCert: !!caCertificate,
+            sslMode: sslConfig,
+          });
+          
+          return config;
         }
       },
       inject: [ConfigService],
