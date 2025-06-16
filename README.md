@@ -1,96 +1,296 @@
-# FoundersCodex
+# The Founder's Codex: Lifetime Calendar
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+## MVP - "The Visualizer"
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+A life-planning and execution system designed for ambitious entrepreneurs, built on the philosophy of finite time awareness and strategic goal anchoring.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/intro#learn-nx?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+### 🎯 Core Mission
 
-## Run tasks
+Transform your relationship with time by visualizing your entire life as 4,680 weeks (90 years), creating positive pressure to focus on what truly matters while anchoring your most important goals to specific future weeks.
 
-To run tasks with Nx use:
+### 🏗️ Architecture
 
-```sh
-npx nx <target> <project-name>
+This is a monorepo built with Nx containing:
+
+- **API** (NestJS): Backend service with PostgreSQL database
+- **Mobile** (React Native): Cross-platform mobile application
+
+### 📱 MVP Features
+
+#### The 90-Year View (Memento Mori Dashboard)
+- Visual grid of 4,680 weeks representing a potential 90-year lifespan
+- Past weeks automatically greyed out (irreversible "sunk time")
+- Current week highlighted in orange
+- Future weeks available for goal anchoring
+
+#### Manual Keystone Marking
+- Simple text labels for major life goals
+- Anchor important achievements to specific future weeks
+- Visual representation of long-term vision
+
+#### Onboarding Flow
+- Two-step philosophical introduction
+- Birth date input for life grid calculation
+- Powerful first-time user experience emphasizing finite time
+
+### 🚀 Quick Start
+
+#### Prerequisites
+- Node.js 18+
+- npm or yarn
+- PostgreSQL (for API)
+- React Native development environment
+- iOS Simulator or Android Emulator
+
+#### Installation
+
+1. **Clone and install dependencies:**
+```bash
+git clone <repository-url>
+cd founders-codex
+npm install
 ```
 
-For example:
+2. **Set up the database:**
+```bash
+# Create PostgreSQL database
+createdb founders_codex
 
-```sh
-npx nx build myproject
+# The API will auto-sync tables on first run
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+3. **Configure environment variables:**
+```bash
+# Copy example env file
+cp api/.env.example api/.env
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-To install a new plugin you can use the `nx add` command. Here's an example of adding the React plugin:
-```sh
-npx nx add @nx/react
+# Update with your database credentials:
+# DB_HOST=localhost
+# DB_PORT=5432
+# DB_USERNAME=postgres
+# DB_PASSWORD=your_password
+# DB_NAME=founders_codex
 ```
 
-Use the plugin's generator to create new projects. For example, to create a new React app or library:
-
-```sh
-# Generate an app
-npx nx g @nx/react:app demo
-
-# Generate a library
-npx nx g @nx/react:lib some-lib
+4. **Install mobile dependencies:**
+```bash
+cd mobile
+npm install
 ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
-
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Set up CI!
-
-### Step 1
-
-To connect to Nx Cloud, run the following command:
-
-```sh
-npx nx connect
+5. **For iOS (macOS only):**
+```bash
+cd ios
+pod install
+cd ..
 ```
 
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
+#### Running the Applications
 
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
+**Start the API:**
+```bash
+nx serve api
+# API will be available at http://localhost:3000
 ```
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+**Start the Mobile App:**
 
-## Install Nx Console
+For iOS:
+```bash
+nx run mobile:run-ios
+```
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+For Android:
+```bash
+nx run mobile:run-android
+```
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+For Web (development):
+```bash
+nx serve mobile
+```
 
-## Useful links
+### 🧠 Philosophical Foundation
 
-Learn more:
+#### The Finite Lifespan: The Memento Mori Engine
+The core organizing principle is the visceral, visual representation of a finite 90-year lifespan. This creates what Oliver Burkeman terms "positive pressure" - shifting focus from the impossible goal of "getting everything done" to the essential task of doing what truly matters.
 
-- [Learn more about this workspace setup](https://nx.dev/getting-started/intro#learn-nx?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+#### The Practitioner-Scholar
+Designed for founders who understand that building a company is an applied intellectual pursuit, bridging the gap between learning and doing through structured frameworks and feedback loops.
 
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+#### The Antifragile User
+Built to help users navigate "The Struggle" (Ben Horowitz) and emerge stronger, systematically reframing setbacks as features that trigger growth subroutines.
+
+#### Integrated Well-Being
+Extraordinary achievement cannot be sustained at the cost of well-being. The system ensures professional goals are integrated with, not opposed to, holistic flourishing.
+
+### 🎨 Design Principles
+
+#### Language of Growth
+- No judgmental or negative language in UI
+- "Overdue" becomes "Awaiting Action"
+- "Failed" becomes "Learning in Progress"
+- Reinforces growth mindset through every interaction
+
+#### From Vision to Action
+- Seamless navigation between macro (90-year) and micro (daily) perspectives
+- Visual reinforcement of the connection between long-term purpose and immediate execution
+
+#### The Coach in the Code
+- Proactive guidance and intelligent interventions
+- Built-in wisdom from foundational frameworks
+- Helps users apply principles in real-time
+
+### 📂 Project Structure
+
+```
+founders-codex/
+├── api/                          # NestJS Backend
+│   ├── src/
+│   │   ├── entities/            # Database entities
+│   │   │   ├── user.entity.ts
+│   │   │   └── keystone-goal.entity.ts
+│   │   ├── dto/                 # Data transfer objects
+│   │   ├── services/            # Business logic
+│   │   ├── controllers/         # HTTP endpoints
+│   │   └── guards/              # Authentication
+│   └── project.json
+├── mobile/                       # React Native App
+│   ├── src/
+│   │   ├── app/                 # Main application
+│   │   ├── components/          # Reusable components
+│   │   │   └── LifeGrid.tsx     # Core 90-year visualization
+│   │   ├── screens/             # Screen components
+│   │   │   └── OnboardingScreen.tsx
+│   │   └── assets/              # Images, fonts, etc.
+│   └── project.json
+├── nx.json                       # Nx workspace configuration
+├── package.json                  # Root dependencies
+└── README.md
+```
+
+### 🔧 Development Commands
+
+**Build all projects:**
+```bash
+nx run-many -t build
+```
+
+**Test all projects:**
+```bash
+nx run-many -t test
+```
+
+**Lint all projects:**
+```bash
+nx run-many -t lint
+```
+
+**View project graph:**
+```bash
+nx graph
+```
+
+### 🌟 Key Components
+
+#### LifeGrid Component
+The heart of the MVP - displays 4,680 touchable squares representing weeks, with:
+- Dynamic calculation of past/present/future weeks
+- Visual distinction through color coding
+- Keystone goal markers
+- Touch interactions for goal setting
+
+#### OnboardingScreen Component
+Two-step philosophical introduction:
+1. Welcome and philosophy explanation
+2. Birth date input with real-time life statistics
+
+#### User Entity
+Core database model with:
+- Firebase authentication integration
+- Birth date for life grid calculations
+- Helper methods for week calculations
+
+#### KeystoneGoal Entity
+Simple goal anchoring with:
+- Week-based targeting
+- Text labels and descriptions
+- Completion tracking
+
+### 📱 MVP User Journey
+
+1. **First Launch**: Philosophical introduction to finite time awareness
+2. **Birth Date Input**: Calculate personal life grid with dramatic "greying out" moment
+3. **Life Grid Exploration**: Visual confrontation with remaining weeks
+4. **Goal Anchoring**: Set major life goals to specific future weeks
+5. **Daily Return**: Regular exposure to finite time reminder
+
+### 🔮 Future Phases
+
+#### Phase 2: "The Integrated System"
+- Full Goal Stack (10-year → Annual → Quarterly → Weekly → Daily)
+- Habit Engine with atomic habits tracking
+- Resilience Toolkit with Stoic practices
+- Learning Ledger for systematic wisdom capture
+- Well-Being Monitor with PERMA tracking
+
+#### Phase 3: "The Ecosystem & AI Coach"
+- AI-driven personalized insights
+- Privacy-first mastermind groups
+- Health and productivity integrations
+
+### 🛡️ Security & Privacy
+
+- Firebase Authentication for secure user management
+- Minimal data collection (only birth date required)
+- Local storage for MVP goal data
+- PostgreSQL with proper encryption for production
+
+### 🤝 Contributing
+
+This is a philosophical software project. Every feature must:
+1. Be justifiable by referencing core principles
+2. Include `// CONTEXT:` comments linking to philosophical origins
+3. Follow the "Language of Growth" UX principles
+4. Serve the mission of finite time awareness
+
+### 📞 Support
+
+For issues related to:
+- **Technical Setup**: Check the troubleshooting section below
+- **Philosophy**: Reference the source documents for context
+- **Feature Requests**: Must align with core mission and principles
+
+### 🔧 Troubleshooting
+
+**Metro bundler issues:**
+```bash
+cd mobile
+npx react-native start --reset-cache
+```
+
+**iOS build issues:**
+```bash
+cd mobile/ios
+pod install --repo-update
+```
+
+**Database connection issues:**
+- Verify PostgreSQL is running
+- Check environment variables in `api/.env`
+- Ensure database exists and user has proper permissions
+
+### 📚 References
+
+- Oliver Burkeman - "Four Thousand Weeks"
+- Gary Keller - "The ONE Thing"
+- Eric Ries - "The Lean Startup"
+- Martin Seligman - PERMA Model
+- Stoic Philosophy - Marcus Aurelius, Seneca
+- Carol Dweck - "Growth Mindset"
+
+---
+
+*"Four thousand weeks is absurdly, outrageously, terrifyingly short... But that isn't a reason for despair. It's a cause for relief."* - Oliver Burkeman
+
+**Built with philosophical intention. Every line of code serves the mission of helping founders make their finite time count.**
