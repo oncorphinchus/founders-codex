@@ -43,6 +43,23 @@ console.log('');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  
+  // CONTEXT: Add a root route before setting global prefix to handle "/" requests
+  app.getHttpAdapter().get('/', (req: any, res: any) => {
+    res.json({
+      message: 'Welcome to The Founder\'s Codex API',
+      note: 'This is a RESTful API. Please access endpoints at /api/*',
+      availableEndpoints: {
+        'API Base': '/api',
+        'Health Check': '/api/health',
+        'Goals System': '/api/goals', 
+        'Habits System': '/api/habits'
+      },
+      philosophy: 'The 1% Better System - Operationalizing behavioral psychology for founders',
+      documentation: 'Visit /api for detailed endpoint information'
+    });
+  });
+  
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.PORT || 3000;

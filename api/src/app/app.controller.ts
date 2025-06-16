@@ -9,4 +9,14 @@ export class AppController {
   getData() {
     return this.appService.getData();
   }
+
+  @Get('health')
+  getHealth() {
+    return {
+      status: 'healthy',
+      service: 'Founder\'s Codex API',
+      timestamp: new Date().toISOString(),
+      message: 'The 1% Better System API is running successfully'
+    };
+  }
 }
