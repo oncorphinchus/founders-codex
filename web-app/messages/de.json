@@ -1,0 +1,88 @@
+{
+  "auth": {
+    "login": {
+      "title": "Willkommen zurück, Praktiker-Gelehrter",
+      "subtitle": "Setzen Sie Ihre Reise zu Weisheit und Exzellenz fort",
+      "email": "E-Mail-Adresse",
+      "password": "Passwort",
+      "submit": "Sitzung beginnen",
+      "forgotPassword": "Zugang wiederherstellen",
+      "noAccount": "Neu im Codex?",
+      "signUpLink": "Beginnen Sie Ihre Reise"
+    },
+    "register": {
+      "title": "Dem Founder's Codex beitreten",
+      "subtitle": "Verwandeln Sie Vision in Realität durch alte Weisheit und moderne Ausführung",
+      "firstName": "Vorname",
+      "lastName": "Nachname",
+      "email": "E-Mail-Adresse",
+      "password": "Passwort wählen",
+      "confirmPassword": "Passwort bestätigen",
+      "birthDate": "Geburtsdatum",
+      "birthDateHelper": "Wird für Ihre 90-Jahre-Ansicht verwendet",
+      "submit": "Meine Reise beginnen",
+      "hasAccount": "Bereits Mitglied?",
+      "loginLink": "Ihren Weg fortsetzen"
+    },
+    "errors": {
+      "invalidCredentials": "Diese Anmeldedaten benötigen Aufmerksamkeit. Bitte überprüfen und erneut versuchen.",
+      "emailRequired": "E-Mail-Adresse ist für Ihre Reise erforderlich",
+      "passwordRequired": "Passwort ist erforderlich, um Ihren Fortschritt zu schützen",
+      "passwordMismatch": "Passwörter stimmen nicht überein - Konsistenz ist der Schlüssel",
+      "networkError": "Verbindung vorübergehend nicht verfügbar. Ihre Ausdauer wird belohnt."
+    }
+  },
+  "dashboard": {
+    "welcome": "Ihr Kommandozentrum",
+    "currentWeek": "Woche {week} Ihrer Reise",
+    "yourWhy": {
+      "title": "Ihr Warum",
+      "placeholder": "Definieren Sie Ihren Kernzweck - den Nordstern, der jede Entscheidung leitet",
+      "notSet": "Ihr Zweck wartet auf Definition. Dies wird die Grundlage für alles."
+    },
+    "weeklyFocus": {
+      "title": "Fokus dieser Woche",
+      "notSet": "Was ist Ihr EINE Sache diese Woche?"
+    },
+    "dailyWisdom": {
+      "title": "Heutige Weisheit",
+      "quote": "\"Das Hindernis ist der Weg.\" — Marcus Aurelius"
+    }
+  },
+  "lifeGrid": {
+    "title": "Ihre 90-Jahre-Ansicht",
+    "subtitle": "4.680 Wochen, um Ihr Vermächtnis zu schaffen",
+    "currentWeek": "Diese Woche",
+    "weeksLived": "Erlebte Wochen: {count}",
+    "weeksRemaining": "Verbleibende Wochen: {count}",
+    "ageAt": "Alter {age}",
+    "hover": "Sie werden {age} Jahre alt sein"
+  },
+  "navigation": {
+    "dashboard": "Kommandozentrum",
+    "lifeGrid": "90-Jahre-Ansicht",
+    "goals": "Ziel-Stack",
+    "habits": "Gewohnheits-Engine",
+    "journal": "Resilienz-Toolkit",
+    "decisions": "Entscheidungs-Journal",
+    "wellbeing": "Wohlbefindens-Monitor",
+    "insights": "Daten-Einblicke"
+  },
+  "common": {
+    "save": "Fortschritt bewahren",
+    "cancel": "Zurücktreten",
+    "edit": "Verfeinern",
+    "delete": "Entfernen",
+    "confirm": "Fortfahren",
+    "loading": "Weisheit wird verarbeitet...",
+    "success": "Exzellenz erreicht",
+    "error": "Gelegenheit zum Lernen",
+    "noData": "Bereit für Ihre Eingabe",
+    "comingSoon": "Feature in Entwicklung"
+  },
+  "themes": {
+    "stoic": "Stoische Weisheit",
+    "deepWork": "Tiefer Fokus",
+    "growth": "Wachstums-Energie"
+  }
+} 

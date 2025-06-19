@@ -1,0 +1,697 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CONTEXT: Typography from Google Fonts for wisdom and clarity */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+
+@layer base {
+  :root {
+    /* CONTEXT: Default theme variables for shadcn/ui compatibility */
+    --background: 48 10% 98%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+
+    /* CONTEXT: Stoic Theme - Roman marble, parchment, timeless wisdom */
+    --stoic-background: 48 10% 98%; /* Aged parchment */
+    --stoic-foreground: 210 20% 15%; /* Deep charcoal */
+    --stoic-card: 0 0% 100%;
+    --stoic-card-foreground: 210 20% 15%;
+    --stoic-popover: 0 0% 100%;
+    --stoic-popover-foreground: 210 20% 15%;
+    --stoic-primary: 36 45% 35%; /* Roman bronze */
+    --stoic-primary-foreground: 48 10% 98%;
+    --stoic-secondary: 210 40% 96%;
+    --stoic-secondary-foreground: 210 20% 15%;
+    --stoic-muted: 210 40% 96%;
+    --stoic-muted-foreground: 215.4 16.3% 46.9%;
+    --stoic-accent: 210 40% 96%;
+    --stoic-accent-foreground: 210 20% 15%;
+    --stoic-destructive: 0 84.2% 60.2%;
+    --stoic-destructive-foreground: 210 40% 98%;
+    --stoic-border: 214.3 31.8% 91.4%;
+    --stoic-input: 214.3 31.8% 91.4%;
+    --stoic-ring: 36 45% 35%;
+
+    /* CONTEXT: Deep Work Theme - Dark mode for intense focus */
+    --deep-work-background: 222 84% 5%; /* Dark desaturated blue */
+    --deep-work-foreground: 210 40% 90%; /* Soft light gray */
+    --deep-work-card: 222 84% 8%;
+    --deep-work-card-foreground: 210 40% 90%;
+    --deep-work-popover: 222 84% 8%;
+    --deep-work-popover-foreground: 210 40% 90%;
+    --deep-work-primary: 213 100% 60%; /* Electric blue */
+    --deep-work-primary-foreground: 222 84% 5%;
+    --deep-work-secondary: 217 32.6% 17.5%;
+    --deep-work-secondary-foreground: 210 40% 90%;
+    --deep-work-muted: 217 32.6% 17.5%;
+    --deep-work-muted-foreground: 215 20.2% 65.1%;
+    --deep-work-accent: 217 32.6% 17.5%;
+    --deep-work-accent-foreground: 210 40% 90%;
+    --deep-work-destructive: 0 62.8% 50.6%;
+    --deep-work-destructive-foreground: 210 40% 90%;
+    --deep-work-border: 217 32.6% 17.5%;
+    --deep-work-input: 217 32.6% 17.5%;
+    --deep-work-ring: 213 100% 60%;
+
+    /* CONTEXT: Growth Theme - Energetic, optimistic, inspiring action */
+    --growth-background: 0 0% 100%; /* Clean bright white */
+    --growth-foreground: 210 20% 15%; /* Strong dark gray */
+    --growth-card: 0 0% 100%;
+    --growth-card-foreground: 210 20% 15%;
+    --growth-popover: 0 0% 100%;
+    --growth-popover-foreground: 210 20% 15%;
+    --growth-primary: 142 76% 36%; /* Verdant green */
+    --growth-primary-foreground: 0 0% 100%;
+    --growth-secondary: 210 40% 96%;
+    --growth-secondary-foreground: 210 20% 15%;
+    --growth-muted: 210 40% 96%;
+    --growth-muted-foreground: 215.4 16.3% 46.9%;
+    --growth-accent: 210 40% 96%;
+    --growth-accent-foreground: 210 20% 15%;
+    --growth-destructive: 0 84.2% 60.2%;
+    --growth-destructive-foreground: 210 40% 98%;
+    --growth-border: 214.3 31.8% 91.4%;
+    --growth-input: 214.3 31.8% 91.4%;
+    --growth-ring: 142 76% 36%;
+  }
+
+  /* CONTEXT: Dark mode overrides for themes */
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* CONTEXT: Typography hierarchy for wisdom and clarity */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+    font-feature-settings: "kern" 1;
+  }
+
+  .font-wisdom {
+    @apply font-serif font-medium;
+  }
+
+  .font-action {
+    @apply font-sans font-medium;
+  }
+
+  .font-code {
+    @apply font-mono;
+  }
+}
+
+@layer components {
+  /* CONTEXT: Theme-specific body classes for contextual switching */
+  .theme-stoic {
+    --background: var(--stoic-background);
+    --foreground: var(--stoic-foreground);
+    --card: var(--stoic-card);
+    --card-foreground: var(--stoic-card-foreground);
+    --popover: var(--stoic-popover);
+    --popover-foreground: var(--stoic-popover-foreground);
+    --primary: var(--stoic-primary);
+    --primary-foreground: var(--stoic-primary-foreground);
+    --secondary: var(--stoic-secondary);
+    --secondary-foreground: var(--stoic-secondary-foreground);
+    --muted: var(--stoic-muted);
+    --muted-foreground: var(--stoic-muted-foreground);
+    --accent: var(--stoic-accent);
+    --accent-foreground: var(--stoic-accent-foreground);
+    --destructive: var(--stoic-destructive);
+    --destructive-foreground: var(--stoic-destructive-foreground);
+    --border: var(--stoic-border);
+    --input: var(--stoic-input);
+    --ring: var(--stoic-ring);
+  }
+
+  .theme-deep-work {
+    --background: var(--deep-work-background);
+    --foreground: var(--deep-work-foreground);
+    --card: var(--deep-work-card);
+    --card-foreground: var(--deep-work-card-foreground);
+    --popover: var(--deep-work-popover);
+    --popover-foreground: var(--deep-work-popover-foreground);
+    --primary: var(--deep-work-primary);
+    --primary-foreground: var(--deep-work-primary-foreground);
+    --secondary: var(--deep-work-secondary);
+    --secondary-foreground: var(--deep-work-secondary-foreground);
+    --muted: var(--deep-work-muted);
+    --muted-foreground: var(--deep-work-muted-foreground);
+    --accent: var(--deep-work-accent);
+    --accent-foreground: var(--deep-work-accent-foreground);
+    --destructive: var(--deep-work-destructive);
+    --destructive-foreground: var(--deep-work-destructive-foreground);
+    --border: var(--deep-work-border);
+    --input: var(--deep-work-input);
+    --ring: var(--deep-work-ring);
+  }
+
+  .theme-growth {
+    --background: var(--growth-background);
+    --foreground: var(--growth-foreground);
+    --card: var(--growth-card);
+    --card-foreground: var(--growth-card-foreground);
+    --popover: var(--growth-popover);
+    --popover-foreground: var(--growth-popover-foreground);
+    --primary: var(--growth-primary);
+    --primary-foreground: var(--growth-primary-foreground);
+    --secondary: var(--growth-secondary);
+    --secondary-foreground: var(--growth-secondary-foreground);
+    --muted: var(--growth-muted);
+    --muted-foreground: var(--growth-muted-foreground);
+    --accent: var(--growth-accent);
+    --accent-foreground: var(--growth-accent-foreground);
+    --destructive: var(--growth-destructive);
+    --destructive-foreground: var(--growth-destructive-foreground);
+    --border: var(--growth-border);
+    --input: var(--growth-input);
+    --ring: var(--growth-ring);
+  }
+
+  /* CONTEXT: Life Grid styling for the 90-Year View memento mori engine */
+  .life-week {
+    @apply w-3 h-3 border border-border transition-all duration-200 cursor-pointer;
+  }
+
+  .life-week-past {
+    @apply bg-muted-foreground opacity-60;
+  }
+
+  .life-week-current {
+    @apply bg-primary animate-pulse-gentle border-primary border-2;
+  }
+
+  .life-week-future {
+    @apply bg-background hover:bg-secondary hover:border-primary;
+  }
+
+  .life-week-milestone {
+    @apply bg-accent border-accent-foreground border-2;
+  }
+
+  /* CONTEXT: Philosophical button variants embodying growth principles */
+  .btn-wisdom {
+    @apply bg-stoic-primary text-stoic-primary-foreground hover:bg-stoic-primary/90;
+  }
+
+  .btn-growth {
+    @apply bg-growth-primary text-growth-primary-foreground hover:bg-growth-primary/90;
+  }
+
+  .btn-resilience {
+    @apply bg-deep-work-primary text-deep-work-primary-foreground hover:bg-deep-work-primary/90;
+  }
+}
+
+@layer utilities {
+  /* CONTEXT: Utility classes for the philosophical principles */
+  .text-encouraging {
+    @apply text-growth-primary;
+  }
+
+  .text-contemplative {
+    @apply text-stoic-primary;
+  }
+
+  .text-focused {
+    @apply text-deep-work-primary;
+  }
+
+  /* CONTEXT: Typography utilities for different content types */
+  .text-wisdom {
+    @apply font-serif text-lg leading-relaxed;
+  }
+
+  .text-action {
+    @apply font-sans font-medium;
+  }
+
+  .text-reflection {
+    @apply font-serif text-base leading-loose text-muted-foreground;
+  }
+
+  /* CONTEXT: Animation utilities for celebrating process and providing feedback */
+  .animate-success {
+    @apply animate-pulse-gentle text-growth-primary;
+  }
+
+  .animate-completion {
+    @apply transition-all duration-300 transform hover:scale-105;
+  }
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
+    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  line-height: 1.5;
+  tab-size: 4;
+  scroll-behavior: smooth;
+}
+body {
+  font-family: inherit;
+  line-height: inherit;
+  margin: 0;
+}
+h1,
+h2,
+p,
+pre {
+  margin: 0;
+}
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: currentColor;
+}
+h1,
+h2 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    Liberation Mono, Courier New, monospace;
+}
+svg {
+  display: block;
+  vertical-align: middle;
+  shape-rendering: auto;
+  text-rendering: optimizeLegibility;
+}
+pre {
+  background-color: rgba(55, 65, 81, 1);
+  border-radius: 0.25rem;
+  color: rgba(229, 231, 235, 1);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    Liberation Mono, Courier New, monospace;
+  overflow: scroll;
+  padding: 0.5rem 0.75rem;
+}
+
+.shadow {
+  box-shadow: 0 0 #0000, 0 0 #0000, 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+.rounded {
+  border-radius: 1.5rem;
+}
+.wrapper {
+  width: 100%;
+}
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 768px;
+  padding-bottom: 3rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  color: rgba(55, 65, 81, 1);
+  width: 100%;
+}
+#welcome {
+  margin-top: 2.5rem;
+}
+#welcome h1 {
+  font-size: 3rem;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+#welcome span {
+  display: block;
+  font-size: 1.875rem;
+  font-weight: 300;
+  line-height: 2.25rem;
+  margin-bottom: 0.5rem;
+}
+#hero {
+  align-items: center;
+  background-color: hsla(214, 62%, 21%, 1);
+  border: none;
+  box-sizing: border-box;
+  color: rgba(55, 65, 81, 1);
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-top: 3.5rem;
+}
+#hero .text-container {
+  color: rgba(255, 255, 255, 1);
+  padding: 3rem 2rem;
+}
+#hero .text-container h2 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  position: relative;
+}
+#hero .text-container h2 svg {
+  color: hsla(162, 47%, 50%, 1);
+  height: 2rem;
+  left: -0.25rem;
+  position: absolute;
+  top: 0;
+  width: 2rem;
+}
+#hero .text-container h2 span {
+  margin-left: 2.5rem;
+}
+#hero .text-container a {
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 0.75rem;
+  color: rgba(55, 65, 81, 1);
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 1rem 2rem;
+  text-decoration: inherit;
+}
+#hero .logo-container {
+  display: none;
+  justify-content: center;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+#hero .logo-container svg {
+  color: rgba(255, 255, 255, 1);
+  width: 66.666667%;
+}
+#middle-content {
+  align-items: flex-start;
+  display: grid;
+  gap: 4rem;
+  grid-template-columns: 1fr;
+  margin-top: 3.5rem;
+}
+#learning-materials {
+  padding: 2.5rem 2rem;
+}
+#learning-materials h2 {
+  font-weight: 500;
+  font-size: 1.25rem;
+  letter-spacing: -0.025em;
+  line-height: 1.75rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.list-item-link {
+  align-items: center;
+  border-radius: 0.75rem;
+  display: flex;
+  margin-top: 1rem;
+  padding: 1rem;
+  transition-property: background-color, border-color, color, fill, stroke,
+    opacity, box-shadow, transform, filter, backdrop-filter,
+    -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  width: 100%;
+}
+.list-item-link svg:first-child {
+  margin-right: 1rem;
+  height: 1.5rem;
+  transition-property: background-color, border-color, color, fill, stroke,
+    opacity, box-shadow, transform, filter, backdrop-filter,
+    -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  width: 1.5rem;
+}
+.list-item-link > span {
+  flex-grow: 1;
+  font-weight: 400;
+  transition-property: background-color, border-color, color, fill, stroke,
+    opacity, box-shadow, transform, filter, backdrop-filter,
+    -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.list-item-link > span > span {
+  color: rgba(107, 114, 128, 1);
+  display: block;
+  flex-grow: 1;
+  font-size: 0.75rem;
+  font-weight: 300;
+  line-height: 1rem;
+  transition-property: background-color, border-color, color, fill, stroke,
+    opacity, box-shadow, transform, filter, backdrop-filter,
+    -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.list-item-link svg:last-child {
+  height: 1rem;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  width: 1rem;
+}
+.list-item-link:hover {
+  color: rgba(255, 255, 255, 1);
+  background-color: hsla(162, 47%, 50%, 1);
+}
+.list-item-link:hover > span {
+}
+.list-item-link:hover > span > span {
+  color: rgba(243, 244, 246, 1);
+}
+.list-item-link:hover svg:last-child {
+  transform: translateX(0.25rem);
+}
+#other-links {
+}
+.button-pill {
+  padding: 1.5rem 2rem;
+  transition-duration: 300ms;
+  transition-property: background-color, border-color, color, fill, stroke,
+    opacity, box-shadow, transform, filter, backdrop-filter,
+    -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  align-items: center;
+  display: flex;
+}
+.button-pill svg {
+  transition-property: background-color, border-color, color, fill, stroke,
+    opacity, box-shadow, transform, filter, backdrop-filter,
+    -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  flex-shrink: 0;
+  width: 3rem;
+}
+.button-pill > span {
+  letter-spacing: -0.025em;
+  font-weight: 400;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.button-pill span span {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 300;
+  line-height: 1.25rem;
+}
+.button-pill:hover svg,
+.button-pill:hover {
+  color: rgba(255, 255, 255, 1) !important;
+}
+#nx-console:hover {
+  background-color: rgba(0, 122, 204, 1);
+}
+#nx-console svg {
+  color: rgba(0, 122, 204, 1);
+}
+#nx-console-jetbrains {
+  margin-top: 2rem;
+}
+#nx-console-jetbrains:hover {
+  background-color: rgba(255, 49, 140, 1);
+}
+#nx-console-jetbrains svg {
+  color: rgba(255, 49, 140, 1);
+}
+#nx-repo:hover {
+  background-color: rgba(24, 23, 23, 1);
+}
+#nx-repo svg {
+  color: rgba(24, 23, 23, 1);
+}
+#nx-cloud {
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+  padding: 2.5rem 2rem;
+}
+#nx-cloud > div {
+  align-items: center;
+  display: flex;
+}
+#nx-cloud > div svg {
+  border-radius: 0.375rem;
+  flex-shrink: 0;
+  width: 3rem;
+}
+#nx-cloud > div h2 {
+  font-size: 1.125rem;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.75rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+#nx-cloud > div h2 span {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 300;
+  line-height: 1.25rem;
+}
+#nx-cloud p {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  margin-top: 1rem;
+}
+#nx-cloud pre {
+  margin-top: 1rem;
+}
+#nx-cloud a {
+  color: rgba(107, 114, 128, 1);
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  margin-top: 1.5rem;
+  text-align: right;
+}
+#nx-cloud a:hover {
+  text-decoration: underline;
+}
+#commands {
+  padding: 2.5rem 2rem;
+  margin-top: 3.5rem;
+}
+#commands h2 {
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.75rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+#commands p {
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.5rem;
+  margin-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+details {
+  align-items: center;
+  display: flex;
+  margin-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  width: 100%;
+}
+details pre > span {
+  color: rgba(181, 181, 181, 1);
+  display: block;
+}
+summary {
+  border-radius: 0.5rem;
+  display: flex;
+  font-weight: 400;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition-property: background-color, border-color, color, fill, stroke,
+    opacity, box-shadow, transform, filter, backdrop-filter,
+    -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+summary:hover {
+  background-color: rgba(243, 244, 246, 1);
+}
+summary svg {
+  height: 1.5rem;
+  margin-right: 1rem;
+  width: 1.5rem;
+}
+#love {
+  color: rgba(107, 114, 128, 1);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  margin-top: 3.5rem;
+  opacity: 0.6;
+  text-align: center;
+}
+#love svg {
+  color: rgba(252, 165, 165, 1);
+  width: 1.25rem;
+  height: 1.25rem;
+  display: inline;
+  margin-top: -0.25rem;
+}
+@media screen and (min-width: 768px) {
+  #hero {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  #hero .logo-container {
+    display: flex;
+  }
+  #middle-content {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

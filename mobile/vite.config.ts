@@ -33,6 +33,7 @@ export default defineConfig({
   cacheDir: '../node_modules/.vite/mobile',
   define: {
     global: 'window',
+    __DEV__: JSON.stringify(true),
   },
   resolve: {
     extensions,
@@ -41,11 +42,15 @@ export default defineConfig({
       'react-native-svg': 'react-native-svg-web',
       '@react-native/assets-registry/registry':
         'react-native-web/dist/modules/AssetRegistry/index',
+      'react-native-linear-gradient': 'react-native-web-linear-gradient',
     },
   },
   build: {
     reportCompressedSize: true,
-    commonjsOptions: { transformMixedEsModules: true },
+    commonjsOptions: { 
+      transformMixedEsModules: true,
+      include: [/node_modules/],
+    },
     outDir: '../dist/mobile/web',
     rollupOptions: {
       plugins: [rollupPlugin([/react-native-vector-icons/])],
@@ -69,8 +74,18 @@ export default defineConfig({
       jsx: 'automatic',
       loader: { '.js': 'jsx' },
     },
+    include: [
+      'react-native-web',
+      '@react-native-async-storage/async-storage',
+      'react-native-safe-area-context',
+    ],
   },
-  plugins: [react(), nxViteTsPaths()],
+  plugins: [
+    react({
+      include: /\.(jsx|js|tsx|ts)$/,
+    }),
+    nxViteTsPaths(),
+  ],
   // Uncomment this if you are using workers.
   // worker: {
   //  plugins: [ nxViteTsPaths() ],

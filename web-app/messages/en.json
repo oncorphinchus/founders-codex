@@ -1,0 +1,88 @@
+{
+  "auth": {
+    "login": {
+      "title": "Welcome Back, Practitioner-Scholar",
+      "subtitle": "Continue your journey toward wisdom and excellence",
+      "email": "Email Address",
+      "password": "Password",
+      "submit": "Begin Session",
+      "forgotPassword": "Retrieve Access",
+      "noAccount": "New to the Codex?",
+      "signUpLink": "Start Your Journey"
+    },
+    "register": {
+      "title": "Join the Founder's Codex",
+      "subtitle": "Transform vision into reality through ancient wisdom and modern execution",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email Address",
+      "password": "Choose Password",
+      "confirmPassword": "Confirm Password",
+      "birthDate": "Birth Date",
+      "birthDateHelper": "Used to calculate your 90-year view",
+      "submit": "Begin My Journey",
+      "hasAccount": "Already a member?",
+      "loginLink": "Continue Your Path"
+    },
+    "errors": {
+      "invalidCredentials": "These credentials need attention. Please review and try again.",
+      "emailRequired": "Email address is required for your journey",
+      "passwordRequired": "Password is required to protect your progress",
+      "passwordMismatch": "Passwords don't match - consistency is key",
+      "networkError": "Connection temporarily unavailable. Your persistence will be rewarded."
+    }
+  },
+  "dashboard": {
+    "welcome": "Your Command Center",
+    "currentWeek": "Week {week} of your journey",
+    "yourWhy": {
+      "title": "Your Why",
+      "placeholder": "Define your core purpose - the north star that guides every decision",
+      "notSet": "Your purpose awaits definition. This becomes the foundation for everything."
+    },
+    "weeklyFocus": {
+      "title": "This Week's Focus",
+      "notSet": "What's your ONE thing this week?"
+    },
+    "dailyWisdom": {
+      "title": "Today's Wisdom",
+      "quote": "\"The obstacle is the way.\" — Marcus Aurelius"
+    }
+  },
+  "lifeGrid": {
+    "title": "Your 90-Year View",
+    "subtitle": "4,680 weeks to create your legacy",
+    "currentWeek": "This Week",
+    "weeksLived": "Weeks experienced: {count}",
+    "weeksRemaining": "Weeks remaining: {count}",
+    "ageAt": "Age {age}",
+    "hover": "You'll be {age} years old"
+  },
+  "navigation": {
+    "dashboard": "Command Center",
+    "lifeGrid": "90-Year View",
+    "goals": "Goal Stack",
+    "habits": "Habit Engine",
+    "journal": "Resilience Toolkit",
+    "decisions": "Decision Journal",
+    "wellbeing": "Well-Being Monitor",
+    "insights": "Data Insights"
+  },
+  "common": {
+    "save": "Preserve Progress",
+    "cancel": "Step Back",
+    "edit": "Refine",
+    "delete": "Remove",
+    "confirm": "Proceed",
+    "loading": "Processing wisdom...",
+    "success": "Excellence achieved",
+    "error": "Opportunity for learning",
+    "noData": "Ready for your input",
+    "comingSoon": "Feature in development"
+  },
+  "themes": {
+    "stoic": "Stoic Wisdom",
+    "deepWork": "Deep Focus",
+    "growth": "Growth Energy"
+  }
+} 
